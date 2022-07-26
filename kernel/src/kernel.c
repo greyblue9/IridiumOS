@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
-#include <libkern/asm.h>
-#include <libkern/log.h>
+#include <common/asm.h>
+#include <common/log.h>
 #include <limine.h>
 
 
@@ -16,7 +16,6 @@ static void done(void)
 
 static void init(void)
 {
-    kprintf(KINFO "Yo yo yo!\n");
     done();
 }
 
