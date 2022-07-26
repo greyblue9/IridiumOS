@@ -23,34 +23,38 @@
  *
  */
 
+#include <intr/intr.h>
 #include <intr/idt.h>
+#include <intr/exceptions.h>
 
-static struct IDTR idtr;
-static struct InterruptGateDescriptor idt[256];
+#define TRAP_GATE_FLAGS 0x8F
+#define INT_GATE_FLAGS 0x8E
+#define IDT_INT_GATE_USER 0xEE
 
+static void(*exceptions[])(void) = {
+    divide_error,
+    debug_exception,
+    general_protection_fault,
+    general_protection_fault,
+    overflow,
+    bound_range_exceeded,
+    invalid_opcode,
+    no_mathcoprocessor,
+    double_fault,
+    general_protection_fault,
+    invalid_tss,
+    segment_not_present,
+    stack_segment_fault,
+    general_protection_fault,
+    page_fault
+};
 
-void idt_set_desc(uint8_t vec, void* isr, uint32_t flags)
+void intr_init(void)
 {
-    uint64_t addr = (uint64_t)isr;
-    struct InterruptGateDescriptor* vector = &idt[vec];
-
-    vector->isr_low16 = addr & 0xFFFF;
-    vector->isr_mid16 = (addr >> 16) & 0xFFFF;
-    vector->isr_high32 = (addr >> 32);
-    vector->ist = 0;
-    vector->zero = 0;
-    vector->zero1 = 0;
-    vector->zero2 = 0;
-    vector->reserved = 0;
-    vector->p = 1;
-    vector->dpl = 3;
-    vector->cs = 0x28;
-    vector->attr = flags;
-}
-
-void idt_install(void)
-{
-    idtr.limit = sizeof(struct InterruptGateDescriptor) * 256 - 1;
-    idtr.base = (uint64_t)&idt;
-    __asm__ __volatile__("lidt %0" :: "m" (idtr));
+    for (uint8_t i = 0; i <= 0xE; ++i)
+    {
+        idt_set_desc(i, exceptions[i], TRAP_GATE_FLAGS);
+    }
+    
+    idt_install();
 }

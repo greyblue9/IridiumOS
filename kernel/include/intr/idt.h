@@ -47,11 +47,13 @@ struct InterruptGateDescriptor
 };
 
 
-struct IDTR
+struct __attribute__((packed)) IDTR
 {
     uint16_t limit;
     uint64_t base;
 };
 
 void idt_set_desc(uint8_t vec, void* isr, uint32_t flags);
+void idt_install(void);
+
 #endif
