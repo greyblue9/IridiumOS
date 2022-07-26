@@ -15,6 +15,11 @@ all: Iridium.iso
 run: Iridium.iso
 	qemu-system-$(ARCH) -M q35 -m 2G -drive file=Iridium.iso -boot d -monitor stdio --enable-kvm
 
+
+.PHONY: run
+debug: Iridium.iso
+	qemu-system-$(ARCH) -M q35 -m 2G -drive file=Iridium.iso -boot d -monitor stdio -d int -D logfile.txt
+
 .PHONY: debug1
 debug1:
 	qemu-system-$(ARCH) -M q35 -m 2G -drive file=Iridium.iso -boot d -monitor stdio -d int -D logfile.txt -s -S
