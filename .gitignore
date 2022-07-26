@@ -50,6 +50,11 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+*.bak
 *.iso
+*.old
+*.orig
+*.new
+*.rej
 logfile.txt
 kernel/kernel.sys
