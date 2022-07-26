@@ -2,7 +2,7 @@
 
 for i in $(find ./ -type f -name "*.c")
 do
-    gcc $i -Iinclude/ \
+    x86_64-elf-gcc $i -Iinclude/ \
 	    -std=gnu11           \
 	    -ffreestanding       \
 	    -fno-stack-protector \
@@ -28,7 +28,7 @@ do
 done 
 
 
-ld  $(find ./ -type f -name "*.o") -Tlinker.ld            \
+x86_64-elf-ld $(find ./ -type f -name "*.o") -Tlinker.ld            \
 	-nostdlib              \
 	-zmax-page-size=0x1000 \
 	-static                \
